@@ -146,6 +146,8 @@ module Tapioca
       #: (Array[String] constant_names, ?ignore_missing: bool) -> Array[Module]
       def constantize(constant_names, ignore_missing: false)
         constant_map = constant_names.to_h do |name|
+          next [name, nil] if @skip_constant.include?(name)
+
           [name, Object.const_get(name)]
         rescue NameError
           [name, nil]
@@ -155,6 +157,8 @@ module Tapioca
 
         unless unprocessable_constants.empty? || ignore_missing
           unprocessable_constants.each do |name, _|
+            next if @skip_constant.include?(name)
+
             say("Error: Cannot find constant '#{name}'", :red)
             filename = dsl_rbi_filename(name)
             remove_file(filename) if File.file?(filename)
