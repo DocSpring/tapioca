@@ -203,8 +203,8 @@ module Tapioca
           extend T::Sig
 
           # @override
-          #: -> T::Enumerable[Module]
-          def gather_constants
+          #: (Tapioca::Dsl::Pipeline _pipeline) -> T::Enumerable[Module]
+          def gather_constants(_pipeline)
             T.cast(ObjectSpace.each_object(::AASM::ClassMethods), T::Enumerable[Module])
           end
         end

@@ -93,8 +93,8 @@ module Tapioca
           extend T::Sig
 
           # @override
-          #: -> T::Enumerable[Module]
-          def gather_constants
+          #: (Tapioca::Dsl::Pipeline _pipeline) -> T::Enumerable[Module]
+          def gather_constants(_pipeline)
             # This selects all classes that are `ActiveModel::SecurePassword::ClassMethods === klass`.
             # In other words, we select all classes that have `ActiveModel::SecurePassword::ClassMethods`
             # as an ancestor of its singleton class, i.e. all classes that have extended the

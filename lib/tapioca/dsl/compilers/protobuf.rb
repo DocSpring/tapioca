@@ -156,8 +156,8 @@ module Tapioca
           extend T::Sig
 
           # @override
-          #: -> T::Enumerable[Module]
-          def gather_constants
+          #: (Tapioca::Dsl::Pipeline _pipeline) -> T::Enumerable[Module]
+          def gather_constants(_pipeline)
             marker = Google::Protobuf::MessageExts::ClassMethods
 
             enum_modules = ObjectSpace.each_object(Google::Protobuf::EnumDescriptor).map(&:enummodule)

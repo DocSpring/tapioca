@@ -46,8 +46,8 @@ module Tapioca
 
         class << self
           # @override
-          #: -> T::Enumerable[Module]
-          def gather_constants
+          #: (Tapioca::Dsl::Pipeline _pipeline) -> T::Enumerable[Module]
+          def gather_constants(_pipeline)
             # Collect all the classes that include ActiveModel::Validations
             all_classes.select { |c| ActiveModel::Validations > c }
           end

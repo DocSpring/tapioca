@@ -32,12 +32,28 @@ module Tapioca
         end
 
         # @abstract
-        #: -> T::Enumerable[Module]
-        def gather_constants = raise NotImplementedError, "Abstract method called"
+        #: (?Tapioca::Dsl::Pipeline pipeline) -> T::Enumerable[Module]
+        def gather_constants(pipeline = nil) = raise NotImplementedError, "Abstract method called"
 
-        #: -> Set[Module]
-        def processable_constants
-          @processable_constants ||= T::Set[Module].new.compare_by_identity.merge(gather_constants) #: Set[Module]?
+        #: (Tapioca::Dsl::Pipeline pipeline) -> Set[Module]
+        def processable_constants(pipeline)
+          # Cache processable constants per-pipeline instance to respect pipeline configuration
+          @processable_constants_by_pipeline ||= {}
+          cache_key = pipeline.object_id
+          cached = @processable_constants_by_pipeline[cache_key]
+          return cached if cached
+
+          # Call gather_constants with or without pipeline depending on arity for backward compatibility
+          arity = method(:gather_constants).arity
+          enumerable = if arity == 1 || arity < 0
+            gather_constants(pipeline)
+          else
+            gather_constants
+          end
+
+          result = T::Set[Module].new.compare_by_identity.merge(enumerable)
+          @processable_constants_by_pipeline[cache_key] = result
+          result
         end
 
         #: (Array[Module] constants) -> void
@@ -47,7 +63,7 @@ module Tapioca
 
         #: -> void
         def reset_state
-          @processable_constants = nil
+          @processable_constants_by_pipeline = nil
           @all_classes = nil
           @all_modules = nil
         end

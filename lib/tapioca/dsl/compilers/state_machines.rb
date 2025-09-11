@@ -158,8 +158,8 @@ module Tapioca
           extend T::Sig
 
           # @override
-          #: -> T::Enumerable[Module]
-          def gather_constants
+          #: (Tapioca::Dsl::Pipeline _pipeline) -> T::Enumerable[Module]
+          def gather_constants(_pipeline)
             all_classes.select { |mod| ::StateMachines::InstanceMethods > mod }
           end
         end

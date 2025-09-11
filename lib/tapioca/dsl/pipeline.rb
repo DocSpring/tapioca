@@ -124,7 +124,7 @@ module Tapioca
         Compiler.requested_constants = requested_constants
         constants = Set.new.compare_by_identity
         active_compilers.each do |compiler|
-          constants.merge(compiler.processable_constants)
+          constants.merge(compiler.processable_constants(self))
         end
         constants = filter_anonymous_and_reloaded_constants(constants)
         constants -= skipped_constants

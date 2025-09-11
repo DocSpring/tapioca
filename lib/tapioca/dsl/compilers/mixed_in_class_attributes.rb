@@ -63,8 +63,8 @@ module Tapioca
           extend T::Sig
 
           # @override
-          #: -> T::Enumerable[Module]
-          def gather_constants
+          #: (Tapioca::Dsl::Pipeline _pipeline) -> T::Enumerable[Module]
+          def gather_constants(_pipeline)
             # Select all non-anonymous modules that have overridden Module.included
             all_modules.select do |mod|
               !mod.is_a?(Class) && name_of(mod) && Runtime::Reflection.method_of(mod, :included).owner != Module

@@ -84,8 +84,8 @@ module Tapioca
           end
 
           # @override
-          #: -> T::Enumerable[Module]
-          def gather_constants
+          #: (Tapioca::Dsl::Pipeline _pipeline) -> T::Enumerable[Module]
+          def gather_constants(_pipeline)
             descendants_of(::ActiveRecord::Base)
               .reject(&:abstract_class?)
               .select { |c| action_text_associations(c).any? }

@@ -65,11 +65,15 @@ module Tapioca
           extend T::Sig
 
           # @override
-          #: -> T::Enumerable[Module]
-          def gather_constants
+          #: (Tapioca::Dsl::Pipeline pipeline) -> T::Enumerable[Module]
+          def gather_constants(pipeline)
             all_modules.select do |mod|
-              name_of(mod) && # i.e. not anonymous
-                !mod.singleton_class? &&
+              # Skip if requested via pipeline configuration (support string or module entries)
+              mod_name = name_of(mod)
+              next if mod_name.nil? # i.e. not anonymous
+              next if pipeline.skipped_constants.include?(mod_name)
+
+              !mod.singleton_class? &&
                 ActiveSupport::Concern > mod.singleton_class &&
                 has_dependencies?(mod)
             end

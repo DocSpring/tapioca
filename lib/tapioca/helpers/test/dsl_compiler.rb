@@ -80,7 +80,7 @@ module Tapioca
 
           #: -> Array[String]
           def gathered_constants
-            compiler_class.processable_constants.filter_map(&:name).sort
+            compiler_class.processable_constants(pipeline).filter_map(&:name).sort
           end
 
           #: ((Symbol | String) constant_name, ?compiler_options: Hash[Symbol, untyped]) -> String
